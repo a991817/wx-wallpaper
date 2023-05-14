@@ -1,0 +1,13 @@
+<!--pages/categories/categories.wxml-->
+
+<view class="wallpaper-page-container" bindscroll="onPageScroll">
+  <t-row gutter="16" wx:for="{{ categoryList }}" wx:for-item="row" wx:key="index">
+    <t-col span="8" t-class="dark" wx:for="{{ row }}" wx:for-item="category" wx:key="index1">
+      <t-image src="{{category.imgUrl}}" mode="aspectFill" shape="round" height="120rpx" class="categoryImg" data-category="{{category.category}}" data-name="{{category.categoryName}}" bind:tap="onClickcategory" />
+    </t-col>
+  </t-row>
+
+  <!-- status=0-不显示 1-加载中 2-没有更多了 3-加载失败 -->
+  <load-more list-is-empty="{{true}}" status="{{wallpaperLoadStatus}}" bind:retry="onReTry" />
+  <t-toast id="t-toast" />
+</view>
