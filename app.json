@@ -4,7 +4,6 @@
     "pages/headimg/headimg",
     "pages/categories/categories",
     "pages/innerWallpaper/innerWallpaper",
-    "pages/home/home",
     "pages/usercenter/index",
     "pages/usercenter/person-info/index",
     "pages/usercenter/address/list/index",
@@ -23,10 +22,6 @@
         "text": "壁纸"
       },
       {
-        "pagePath": "pages/home/home",
-        "text": "首页"
-      },
-      {
         "pagePath": "pages/headimg/headimg",
         "text": "头像"
       },
@@ -36,9 +31,6 @@
       }
     ]
   },
-  "requiredPrivateInfos": [
-    "chooseAddress"
-  ],
   "lazyCodeLoading": "requiredComponents",
   "usingComponents": {},
   "window": {

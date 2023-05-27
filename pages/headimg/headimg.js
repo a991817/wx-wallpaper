@@ -1,5 +1,8 @@
 // pages/wallpaper/wallpaper.js
 import Toast from 'tdesign-miniprogram/toast/index';
+import {
+  addVisit
+} from '../../services/myWallpaper/my_wallpaper';
 Component({
   data: {
     headimgList: [], // 壁纸列表
@@ -39,10 +42,13 @@ Component({
   methods: {
     onClick(event) {
       const imageUrl = event.currentTarget.dataset.url;
+      const resourceId = event.currentTarget.dataset.id;
       wx.previewImage({
         current: imageUrl, // 当前显示图片的http链接
         urls: [imageUrl] // 需要预览的图片http链接列表
       })
+
+      addVisit(resourceId)
     },
     onClose(e) {
       const {
@@ -58,7 +64,7 @@ Component({
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady() {
-      this.loadHeadImg(1, 15)
+      this.loadHeadImg(1, 21)
       this.loadTabs(2)
       this.setData({
         pageLoading: true,
@@ -109,6 +115,13 @@ Component({
 
     onShow() {
       this.getTabBar().init();
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
     },
 
     getHeadbanner() {
@@ -172,7 +185,7 @@ Component({
     freshPage() {
       this.setData({
         pageNo: 1,
-        pageSize: 12
+        pageSize: 21
       })
     },
 
@@ -186,7 +199,7 @@ Component({
       var that = this
       var headimgList = that.data.headimgList
       wx.request({
-        url: 'http://106.52.82.169:8090/wallpaper/v1/headImg/' + that.data.category + '/' + pageNo + '/' + pageSize, // API的URL
+        url: 'https://wallpaper.airui.life/wallpaper/v1/headImg/' + that.data.category + '/' + pageNo + '/' + pageSize, // API的URL
         method: 'GET', // 请求方法为GET
         success: function (res) {
           // 请求成功时的回调函数
@@ -207,7 +220,7 @@ Component({
     loadTabs(resourceType) {
       var that = this
       wx.request({
-        url: 'http://106.52.82.169:8090/wallpaper/v1/tabs/' + resourceType, // API的URL
+        url: 'https://wallpaper.airui.life/wallpaper/v1/tabs/' + resourceType, // API的URL
         method: 'GET', // 请求方法为GET
         success: function (res) {
           var remoteList = res.data.data

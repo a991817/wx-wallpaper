@@ -1,5 +1,7 @@
 // pages/wallpaper/wallpaper.js
-import Toast from 'tdesign-miniprogram/toast/index';
+import {
+  addVisit
+} from '../../services/myWallpaper/my_wallpaper';
 Component({
   data: {
     wallpaperList: [], // 壁纸列表
@@ -19,6 +21,7 @@ Component({
     tabList: [],
     wallpaperLoadStatus: 0,
     pageLoading: false,
+    // 轮播图设置
     current: 1,
     autoplay: true,
     duration: '500',
@@ -27,7 +30,7 @@ Component({
       type: 'dots'
     },
     swiperImageProps: {
-      mode: 'scaleToFill'
+      mode: 'aspectFill'
     },
   },
 
@@ -39,10 +42,13 @@ Component({
   methods: {
     onClick(event) {
       const imageUrl = event.currentTarget.dataset.url;
+      const resourceId = event.currentTarget.dataset.id;
       wx.previewImage({
         current: imageUrl, // 当前显示图片的http链接
         urls: [imageUrl] // 需要预览的图片http链接列表
       })
+
+      addVisit(resourceId)
     },
     onClose(e) {
       const {
@@ -58,26 +64,32 @@ Component({
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady() {
-      this.loadWallpaper(1, 9)
-      this.loadTabs(1)
       this.setData({
         pageLoading: true,
-        imgSrcs: this.getHeadImg(),
       });
+      this.loadWallpaper(1, 9)
+      this.loadTabs(1)
+      this.loadBanners()
       this.setData({
         pageLoading: false
       });
 
       // 创建选择器查询对象
-      const query = wx.createSelectorQuery();
+      // const query = wx.createSelectorQuery();
 
-      query.select('.wallpaper-page-tabs').boundingClientRect(); // 选择目标元素
-      var that = this
-      query.exec(function (res) {
-        that.setData({
-          tabTop: res[0].top
-        })
-      })
+      // query.select('.wallpaper-page-tabs').boundingClientRect(); // 选择目标元素
+      // var that = this
+      // query.exec(function (res) {
+      //   that.setData({
+      //     tabTop: res[0].top
+      //   })
+      // })
+    },
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
     },
 
     onReachBottom() {
@@ -133,7 +145,7 @@ Component({
       this.getTabBar().init();
     },
 
-    getHeadImg() {
+    getBanners() {
       return [
         'https://cdn-we-retail.ym.tencent.com/tsr/home/v2/banner1.png',
         'https://cdn-we-retail.ym.tencent.com/tsr/home/v2/banner2.png',
@@ -144,7 +156,6 @@ Component({
       ]
     },
     getWallpapers(wallpaperUrlList) {
-      console.log("getWallpapers")
       var result = []
       var row = []
       for (var i = 0; i < wallpaperUrlList.length; i++) {
@@ -154,7 +165,6 @@ Component({
           row = []
         }
       }
-      console.log(result)
       return result
     },
 
@@ -182,7 +192,7 @@ Component({
       var that = this
       var wallpaperList = that.data.wallpaperList
       wx.request({
-        url: 'http://106.52.82.169:8090/wallpaper/v1/wallpaper/' + that.data.category + '/' + pageNo + '/' + pageSize, // API的URL
+        url: 'https://wallpaper.airui.life/wallpaper/v1/wallpaper/' + that.data.category + '/' + pageNo + '/' + pageSize, // API的URL
         method: 'GET', // 请求方法为GET
         success: function (res) {
           // 请求成功时的回调函数
@@ -202,7 +212,7 @@ Component({
     loadTabs(resourceType) {
       var that = this
       wx.request({
-        url: 'http://106.52.82.169:8090/wallpaper/v1/tabs/' + resourceType, // API的URL
+        url: 'https://wallpaper.airui.life/wallpaper/v1/tabs/' + resourceType, // API的URL
         method: 'GET', // 请求方法为GET
         success: function (res) {
           var remoteList = res.data.data
@@ -222,9 +232,50 @@ Component({
       wx.navigateTo({
         url: '/pages/categories/categories',
       });
+    },
+
+    onClickLatest() {
+      wx.navigateTo({
+        url: '/pages/innerWallpaper/innerWallpaper?category=99&categoryName=最新',
+      });
+    },
+    onClickHot() {
+      wx.navigateTo({
+        url: '/pages/innerWallpaper/innerWallpaper?category=98&categoryName=最热',
+      });
+    },
+
+    loadBanners() {
+      var that = this
+      wx.request({
+        url: 'https://wallpaper.airui.life/wallpaper/v1/banners', // API的URL
+        method: 'GET', // 请求方法为GET
+        success: function (res) {
+          var remoteList = res.data.data
+          console.log(res.data)
+          that.setData({
+            imgSrcs: remoteList
+          })
+        },
+        fail: function (err) {
+          // 请求失败时的回调函数
+          console.error(err);
+        }
+      });
+    },
+    async addVisit(resourceId) {
+      wx.request({
+        url: 'https://wallpaper.airui.life/wallpaper/v1/resource/visit', // 请求的 URL
+        method: 'POST', // 请求方法为 POST
+        data: {
+          resource_id: resourceId,
+        },
+        success: function (res) {
+          console.log(res.data); // 输出响应数据
+          // 处理请求成功的逻辑
+        },
+      });
     }
-
-
 
   },
 });

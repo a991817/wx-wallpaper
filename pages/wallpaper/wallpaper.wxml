@@ -3,14 +3,14 @@
 </view>
 <!-- // 轮播图，以后再用 -->
 <view class="wallpaper-page-header">
-  <view class="swiper-wrap">
+  <!-- <view class="swiper-wrap">
     <t-swiper wx:if="{{imgSrcs.length > 0}}" current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{navigation}}" imageProps="{{swiperImageProps}}" list="{{imgSrcs}}" bind:click="navToActivityDetail" />
-  </view>
+  </view> -->
   <!-- 分类图标 -->
   <t-grid class="block" column="{{3}}">
     <t-grid-item text="分类" image="/common/2.png" bind:tap="onClickCategories" />
-    <t-grid-item text="最新" image="/common/3.png" />
-    <t-grid-item text="最热" image="/common/1.png" />
+    <t-grid-item text="最新" image="/common/3.png" bind:tap="onClickLatest" />
+    <t-grid-item text="最热" image="/common/1.png" bind:tap="onClickHot" />
   </t-grid>
 </view>
 
@@ -25,7 +25,7 @@
 
   <t-row gutter="16" wx:for="{{ wallpaperList }}" wx:for-item="row" wx:key="index">
     <t-col span="8" t-class="dark" wx:for="{{ row }}" wx:for-item="wallpaper" wx:key="index1">
-      <t-image src="{{wallpaper}}" mode="aspectFill" shape="round" aria-label="一个放置在墙角的黄色行李箱" height="423rpx" bind:tap="onClick" class="wallpaperImg" data-url="{{wallpaper}}" />
+      <t-image src="{{wallpaper.url}}" mode="aspectFill" shape="round" height="423rpx" bind:tap="onClick" class="wallpaperImg" data-url="{{wallpaper.url}}" data-id="{{wallpaper.resourceId}}"/>
       <text class="text">{{item.text}}</text>
     </t-col>
   </t-row>

@@ -19,7 +19,7 @@
 
   <t-row gutter="16" wx:for="{{ headimgList }}" wx:for-item="row" wx:key="index">
     <t-col span="8" t-class="dark" wx:for="{{ row }}" wx:for-item="headimg" wx:key="index1">
-      <t-image src="{{headimg}}" mode="aspectFill" shape="round" style="height: 240rpx; " bind:tap="onClick" class="wallpaperImg" data-url="{{headimg}}" />
+      <t-image src="{{headimg.url}}" mode="aspectFill" shape="round" style="height: 240rpx; " bind:tap="onClick" class="wallpaperImg" data-url="{{headimg.url}}" data-id="{{headimg.resourceId}}" />
     </t-col>
   </t-row>
 

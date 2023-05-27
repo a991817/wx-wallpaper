@@ -1,5 +1,7 @@
 // pages/wallpaper/wallpaper.js
-import Toast from 'tdesign-miniprogram/toast/index';
+import {
+  addVisit
+} from '../../services/myWallpaper/my_wallpaper';
 Component({
   data: {
     wallpaperList: [], // 壁纸列表
@@ -18,10 +20,13 @@ Component({
   methods: {
     onClick(event) {
       const imageUrl = event.currentTarget.dataset.url;
+      const resourceId = event.currentTarget.dataset.id;
       wx.previewImage({
         current: imageUrl, // 当前显示图片的http链接
         urls: [imageUrl] // 需要预览的图片http链接列表
       })
+
+      addVisit(resourceId)
     },
 
     onClose(e) {
@@ -38,13 +43,19 @@ Component({
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady() {
-      this.loadWallpaper(1, 9)
       this.setData({
         pageLoading: true,
       });
+      this.loadWallpaper(1, 9)
       this.setData({
         pageLoading: false
       });
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
 
     },
 
@@ -122,7 +133,7 @@ Component({
       var wallpaperList = that.data.wallpaperList
       console.log(that.data)
       wx.request({
-        url: 'http://106.52.82.169:8090/wallpaper/v1/wallpaper/' + that.data.category + '/' + pageNo + '/' + pageSize, // API的URL
+        url: 'https://wallpaper.airui.life/wallpaper/v1/wallpaper/' + that.data.category + '/' + pageNo + '/' + pageSize, // API的URL
         method: 'GET', // 请求方法为GET
         success: function (res) {
           // 请求成功时的回调函数

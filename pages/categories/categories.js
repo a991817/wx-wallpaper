@@ -60,6 +60,13 @@ Page({
   },
 
   /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function () {
+
+  },
+
+  /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
@@ -107,7 +114,7 @@ Page({
     var that = this
     var categoryList = this.data.categoryList
     wx.request({
-      url: 'http://106.52.82.169:8090/wallpaper/v1/categories/1', // API的URL
+      url: 'https://wallpaper.airui.life/wallpaper/v1/categories/1', // API的URL
       method: 'GET', // 请求方法为GET
       success: function (res) {
         var remoteList = res.data.data

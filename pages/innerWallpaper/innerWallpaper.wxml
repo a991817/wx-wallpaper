@@ -5,7 +5,7 @@
 <view class="wallpaper-page-container" bindscroll="onPageScroll">
   <t-row gutter="16" wx:for="{{ wallpaperList }}" wx:for-item="row" wx:key="index">
     <t-col span="8" t-class="dark" wx:for="{{ row }}" wx:for-item="wallpaper" wx:key="index1">
-      <t-image src="{{wallpaper}}" mode="aspectFill" shape="round" aria-label="一个放置在墙角的黄色行李箱" height="423rpx" bind:tap="onClick" class="wallpaperImg" data-url="{{wallpaper}}" />
+      <t-image src="{{wallpaper.url}}" mode="aspectFill" shape="round" height="423rpx" bind:tap="onClick" class="wallpaperImg" data-url="{{wallpaper.url}}" data-id="{{wallpaper.resourceId}}" />
       <text class="text">{{item.text}}</text>
     </t-col>
   </t-row>
